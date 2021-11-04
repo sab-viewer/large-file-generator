@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class LargeFileGenerator {
 
-    public static final String TARGET_FILE_PATH = System.getProperty("lfg.target.file.path", "C:\\d\\tmp\\largeFile.txt");
+    public static final String TARGET_FILE_PATH = System.getProperty("lfg.target.file.path", "largeFile.txt");
     public static final int TARGET_STRING_LENGTH = Integer.parseInt(System.getProperty("lfg.target.string.length", "1024"));
     public static final int LINES_COUNT = Integer.parseInt(System.getProperty("lfg.lines.count", "1024"));
 
