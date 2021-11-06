@@ -2,6 +2,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class LargeFileGenerator {
@@ -30,7 +31,7 @@ public class LargeFileGenerator {
     public static void main(String[] args) {
         final Random random = new Random();
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TARGET_FILE_PATH))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(TARGET_FILE_PATH, StandardCharsets.UTF_8))) {
             for (int lineNum = 1; lineNum <= LINES_COUNT; ++lineNum) {
                 final String line;
                 if (LINE_NUM_MARKER != 0 && lineNum % LINE_NUM_MARKER == 0) {
