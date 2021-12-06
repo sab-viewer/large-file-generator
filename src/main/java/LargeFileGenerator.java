@@ -33,9 +33,8 @@ public class LargeFileGenerator {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(TARGET_FILE_PATH, StandardCharsets.UTF_8))) {
             for (int lineNum = 1; lineNum <= LINES_COUNT; ++lineNum) {
-                final String line;
                 if (LINE_NUM_MARKER != 0 && lineNum % LINE_NUM_MARKER == 0) {
-                    line = "" + lineNum + ": =====================================\n";
+                    writer.write("" + lineNum + ": =====================================\n");
                 } else {
                     final int targetLineLength;
                     if (!RANDOMIZE_LINE_LENGTH || (ENSURE_MAX_LINE_LENGTH_EVERY_NTH_LINE != 0 && lineNum % ENSURE_MAX_LINE_LENGTH_EVERY_NTH_LINE == 0)) {
@@ -43,9 +42,8 @@ public class LargeFileGenerator {
                     } else {
                         targetLineLength = random.nextInt(TARGET_STRING_LENGTH + 1);
                     }
-                    line = randomString(random, targetLineLength, COLUMN_NUM_MARKER) + "\n";
+                    randomString(random, targetLineLength, COLUMN_NUM_MARKER, writer);
                 }
-                writer.write(line);
                 if (lineNum > 0 && lineNum % 25000 == 0) {
                     System.out.println("Wrote " + lineNum + " lines");
                 }
@@ -55,8 +53,7 @@ public class LargeFileGenerator {
         }
     }
 
-    public static String randomString(final Random random, final int targetStringLength, final int columnNumMarker) {
-
+    public static void randomString(final Random random, final int targetStringLength, final int columnNumMarker, BufferedWriter writer) throws IOException {
         final StringBuilder stringBuilder = new StringBuilder();
         for (int lineLength = 1; lineLength <= targetStringLength; ++lineLength) {
             final char character = ALPHABET[random.nextInt(ALPHABET.length)];
@@ -69,8 +66,13 @@ public class LargeFileGenerator {
                     System.err.println("Cannot put column marker. It is too long (cannot fit before the next one).");
                 }
             }
+            if (stringBuilder.length() >= COLUMN_NUM_MARKER * 10240) {
+                writer.write(stringBuilder.toString());
+                stringBuilder.setLength(0);
+            }
         }
-        return stringBuilder.toString();
+        stringBuilder.append('\n');
+        writer.write(stringBuilder.toString());
     }
 
 }
