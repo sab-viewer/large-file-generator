@@ -17,11 +17,17 @@ public class LargeFileGenerator {
     private static final boolean RANDOMIZE_LINE_LENGTH = Boolean.parseBoolean(System.getProperty("lfg.randomize.line.length", "false"));
     private static final int ENSURE_MAX_LINE_LENGTH_EVERY_NTH_LINE = Integer.parseInt(System.getProperty("lfg.ensure.max.line.length.every.nth.line", "31")); // used, when RANDOMIZE_LINE_LENGTH == true.
 
+    private static final boolean SELECT_CONTENT_FROM_RANDOM_ALPHABET = Boolean.parseBoolean(System.getProperty("lfg.select.content.from.random.alphabet", "true"));
     private static final boolean ADD_NON_ASCII_CHARACTERS = Boolean.parseBoolean(System.getProperty("lfg.add.non.ascii.characters", "false"));
 
     private static final char[] ALPHABET;
     static {
-        String stringOfCharacters = "abcdefghijklmnopqrstuvwxyz`1234567890-=[]\\;',./ ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+        String stringOfCharacters;
+        if (SELECT_CONTENT_FROM_RANDOM_ALPHABET) {
+            stringOfCharacters = "abcdefghijklmnopqrstuvwxyz`1234567890-=[]\\;',./ ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+{}|:\"<>?";
+        } else {
+            stringOfCharacters = "a";
+        }
         if (ADD_NON_ASCII_CHARACTERS) {
             stringOfCharacters += "äåčćèəéêēﬀößüŭ§×÷°ÄÖÜ";
         }
